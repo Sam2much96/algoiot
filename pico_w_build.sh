@@ -1,0 +1,1 @@
+cd build && cmake .. -DPICO_BOARD=pico_w -DWIFI_SSID="Airtel 4G MiFi_4C91" -DWIFI_PASSWORD="52892608" && make
