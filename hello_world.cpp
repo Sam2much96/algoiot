@@ -18,9 +18,9 @@
 
 //  Uart Setup
 //  Board B Uses Tx Pin
-#define UART_ID uart0
+#define UART_ID uart1
 #define BAUD_RATE 9600
-#define UART_TX_PIN 0
+#define UART_TX_PIN 4
 
 // LED
 
