@@ -23,7 +23,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.*/
 
-// #include <pico/stdlib.h>
+#include <pico/stdlib.h>
 #include <string.h>
 #include <stdint.h>
 #include <Crypto.h>
@@ -34,18 +34,28 @@
 #include <AlgoIoT.h>
 
 #include <stdbool.h> // for error and bug fixes, remove later
-// Debug Outputs
-// Log To SD Card
+
+// #include "../webserver/requests.hpp" //lwip http client
+// Uart
+#include <hardware/uart.h>
+//  Debug Outputs
+//  Log To UArt
 #define LIB_DEBUGMODE
-// #define DEBUG_SERIAL Serial
+//  Uart Setup
+//  Board B Uses Tx Pin
+#define UART_ID uart1
+#define BAUD_RATE 9600
+#define UART_TX_PIN 4 // #define DEBUG_SERIAL Serial
 
 // Class AlgoIoT
 
 ///////////////////////////////
 // Public methods (exported)
 ///////////////////////////////
-
+// Functions
+// (1) Offline Constructors
 // Constructor
+
 AlgoIoT::AlgoIoT(const char *sAppName, const char *nodeAccountMnemonics)
 {
   int iErr = 0;
@@ -53,7 +63,8 @@ AlgoIoT::AlgoIoT(const char *sAppName, const char *nodeAccountMnemonics)
   {
 #ifdef LIB_DEBUGMODE
     // DEBUG_SERIAL.println("\n Error: NULL AppName passed to constructor\n");
-    strcpy("\n Error: NULL AppName passed to constructor\n", Debug);
+    printf("\n Error: NULL AppName passed to constructor\n");
+    uart_puts(UART_ID, "\n Error: NULL AppName passed to constructor\n");
 #endif
     return;
   }
@@ -61,7 +72,8 @@ AlgoIoT::AlgoIoT(const char *sAppName, const char *nodeAccountMnemonics)
   {
 #ifdef LIB_DEBUGMODE
     // DEBUG_SERIAL.println("\n Error: app name too long\n");
-    strcpy("\n Error: app name too long\n", Debug);
+    printf("\n Error: app name too long\n");
+    uart_puts(UART_ID, "\n Error: app name too long\n");
 #endif
     return;
   }
@@ -70,8 +82,8 @@ AlgoIoT::AlgoIoT(const char *sAppName, const char *nodeAccountMnemonics)
   if (nodeAccountMnemonics == NULL)
   {
 #ifdef LIB_DEBUGMODE
-    // DEBUG_SERIAL.println("\n Error: NULL mnemonic words passed to constructor\n");
-    strcpy(Debug, "\n Error: NULL mnemonic words passed to constructor\n");
+    uart_puts(UART_ID, "\n Error: NULL mnemonic words passed to constructor\n");
+    printf("\n Error: NULL mnemonic words passed to constructor\n");
 #endif
     return;
   }
@@ -85,7 +97,8 @@ AlgoIoT::AlgoIoT(const char *sAppName, const char *nodeAccountMnemonics)
   if (iErr)
   {
 #ifdef LIB_DEBUGMODE
-    // DEBUG_SERIAL.printf("\n Error %d decoding Algorand private key from mnemonic words\n", iErr);
+    std::string s = std::to_string(("\n Error %d decoding Algorand private key from mnemonic words\n", iErr));
+    uart_puts(UART_ID, s.c_str());
     printf("\n Error %d decoding Algorand private key from mnemonic words\n", iErr);
 
 #endif
@@ -95,8 +108,13 @@ AlgoIoT::AlgoIoT(const char *sAppName, const char *nodeAccountMnemonics)
   // Derive public key = sender address ( = this node address) from private key
   Ed25519::derivePublicKey(m_senderAddressBytes, m_privateKey);
 
-  // By default, use current (sender) address as destination address (transaction to self)
-  // User may set a different address later, with appropriate setter
+  // char *dst = reinterpret_cast<char *>(m_privateKey);
+  printf("Private Key: %d \n", m_privateKey);
+  printf("Public Key: %d \n", m_senderAddressBytes);
+
+  // uart_puts(UART_ID, dst);
+  //   By default, use current (sender) address as destination address (transaction to self)
+  //   User may set a different address later, with appropriate setter
   m_receiverAddressBytes = (uint8_t *)malloc(ALGORAND_ADDRESS_BYTES);
   if (!m_receiverAddressBytes)
   {
@@ -961,6 +979,7 @@ int AlgoIoT::prepareTransactionMessagePack(msgPack msgPackTx,
 
     return 5;
   }
+
   // lv value
   iErr = msgpackAddUInt32(msgPackTx, lv);
   if (iErr)
@@ -1203,12 +1222,22 @@ int AlgoIoT::createSignedBinaryTransaction(msgPack mPack, const uint8_t signatur
 int AlgoIoT::submitTransaction(msgPack msgPackTx)
 {
   // Temporarily disabled for debugging and refactoring
-  // String httpRequest = m_httpBaseURL + POST_TRANSACTION;
+  std::string httpRequest = m_httpBaseURL + POST_TRANSACTION;
+  // char buffer[10];
+  // strcpy(buffer, httpRequest);
+  //  Configure server and url for http post request
+  // HTTPGet request;
+  // char requestURL[48];
+  // strncpy(requestURL, httpRequest.c_str(), sizeof(requestURL) - 1);
+  // requestURL[sizeof(requestURL) - 1] = '\0'; // Ensure null-termination
+  // printf("url debug %d :", requestURL);      // debug url
+  // request.set_url(requestURL);
+  // request.MyHTTPPORTSetter(6060);
+  // request.MyTCPIPSERVERSetter(std::string("6060"));
 
-  // Configure server and url
-  // m_httpClient.begin(httpRequest);
+  // m_httpClient = httpc_get_file_dns(httpRequest.c_str()); //.begin(httpRequest);
 
-  // Configure MIME type
+  // Configure MIME type & Header
   // m_httpClient.addHeader("Content-Type", ALGORAND_POST_MIME_TYPE);
 
   int httpResponseCode = -1; // m_httpClient.POST(msgPackTx->msgBuffer, msgPackTx->currentMsgLen);

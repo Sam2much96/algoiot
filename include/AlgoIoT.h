@@ -28,6 +28,8 @@
  * */
 
 
+// (1) Uses an api en point
+
 #ifndef __ALGOIOT_H
 #define __ALGOIOT_H
 
@@ -35,9 +37,10 @@
 #include <stdint.h>
 #include <string>
 
-// Http client replaced with : https://github.com/marceloalcocer/picohttps
-// replace http client with libcurl for http requests
-// #include <HTTPClient.h> // https://github.com/espressif/arduino-esp32/blob/master/libraries/HTTPClient/src/HTTPClient.h
+// replaced with pico default http client impl 
+// example : https://www.mail-archive.com/lwip-users@nongnu.org/msg19790.html
+
+//#include <HTTPClient.h> // https://github.com/espressif/arduino-esp32/blob/master/libraries/HTTPClient/src/HTTPClient.h
 #include "ArduinoJson.h"  // JSON needed for Algorand transactions. ArduinoJson because: https://arduinojson.org/news/2019/11/19/arduinojson-vs-arduino_json/
 #include "minmpk.h"
 // #include "algoiot_user_config.h" // temporarily disabling
@@ -59,7 +62,7 @@
 #define ALGORAND_TESTNET_ID "testnet-v1.0"
 #define ALGORAND_TESTNET_HASH "SGO1GKSzyE7IEPItTxCByw9x8FmnrCDexi9/cOUJOiI="
 #define ALGORAND_TESTNET_API_ENDPOINT "https://testnet-api.algonode.cloud"  // Algonode Testnet API
-#define ALGORAND_MAINNET_ID "mainnet-v1.0"
+#define ALGORAND_MAINNET_ID "mainnet-v1.0"// migrate to v 2
 #define ALGORAND_MAINNET_HASH "wGHE2Pwdvd7S12BL5FaOP20EGYesN73ktiC1qzkkit8="
 #define ALGORAND_MAINNET_API_ENDPOINT "https://mainnet-api.algonode.cloud"  // Algonode Testnet API
 #define ALGORAND_PAYMENT_TRANSACTION_MIN_FIELDS 9 // without "note", otherwise 10 (not counting "sig" which is separate from txn Map)
@@ -105,9 +108,9 @@ class AlgoIoT
 {
   public:
   // Private vars made public for debugging
-  //HTTPClient m_httpClient; // temporarily disabling for frontend impl
+  ///err_t m_httpClient; // temporarily disabling for frontend impl
   char m_appName[DAPP_NAME_MAX_LEN + 1] = "";
-  std::string m_httpBaseURL = ALGORAND_TESTNET_API_ENDPOINT;
+  std::string m_httpBaseURL = ALGORAND_TESTNET_API_ENDPOINT; // unnecessay description, removed
   char APItoken[ALGORAND_API_TOKEN_CHARS + 1] = "";
   StaticJsonDocument <ALGORAND_MAX_NOTES_SIZE + JSON_ENCODING_MARGIN>m_noteJDoc;  // TO BE TESTED with complete 1000-bytes note field
   char m_transactionID[ALGORAND_TRANSACTIONID_SIZE + 1] = "";
@@ -171,8 +174,6 @@ class AlgoIoT
   int submitTransaction(msgPack msgPackTx); 
 
   
-  char* Debug = "\n Empty\n"; // not working in class
-
 
   ///////////////////
   // Public methods
