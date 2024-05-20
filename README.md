@@ -7,3 +7,8 @@ Algorand IoT tools and microSDK: A Firmware sketch for the Raspberry Pico W micr
 
 This is an example of a transaction performed directly from the device using AlgoIoT: https://testnet.algoexplorer.io/tx/OWXK33Z6DGWDTYRKU7ZD5K2GMFNDVYMWR3QUHRBY3TUDM4DIQAIQ
 
+
+# Third Party dependencies
+-Curl : https://github.com/JosephP91/curlcpp
+-Arduino Crypto Libraries
+-Espressif Microcontroller Crypto Libraries

@@ -4,9 +4,11 @@ cmake_minimum_required(VERSION 3.13)
 set(PROGRAM_NAME hello_world)
 set(PICO_BOARD pico_w)
 
-set(ARDUINO_LIBS ../arduino-esp32-master)
-set(ESP_LIBS ../esp-idf-master)
+#set(ARDUINO_LIBS ../arduino-esp32-master)
+#set(ESP_LIBS ../esp-idf-master)
 
+# Wolf SSL Libraries
+set(WOLFSSL_DIR "${CMAKE_CURRENT_LIST_DIR}/../lib/wolfssl" CACHE STRING "Course Common Lib" )
 
 # initialize the SDK based on PICO_SDK_PATH
 # note: this must happen before project()
@@ -17,8 +19,10 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/webserver
 
     # Impl Arduino Src
-    ${ARDUINO_LIBS}
-    ${ESP_LIBS}
+    #${ARDUINO_LIBS}
+    #${ESP_LIBS}
+
+   
 )
 
 
@@ -37,6 +41,8 @@ execute_process(COMMAND
     py ${CMAKE_CURRENT_SOURCE_DIR}/webserver/makefsdata.py
     WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}
 )
+
+include("wolfssl_import.cmake")
 
 add_executable(${PROGRAM_NAME}
     hello_world.cpp
@@ -61,8 +67,9 @@ add_executable(${PROGRAM_NAME}
     # Real time clock
     ${PICO_SDK_PATH}/lib/lwip/src/apps/sntp/sntp.c
 
-    # wolf ssl
-    
+    #HTTPRequest
+
+   
 )
 
 # Add pico_stdlib library which aggregates commonly used features
@@ -78,6 +85,8 @@ target_link_libraries(
     pico_lwip_http
     pico_lwip_mbedtls
     pico_mbedtls 
+
+    wolfssl
     )
 
 #Usb and  Uart Serial Output# 

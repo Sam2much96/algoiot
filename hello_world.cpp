@@ -52,6 +52,9 @@
 
 #define WIFI_SSID "Galaxy A0220d1"
 #define WIFI_PASSWORD "rxlz8491"
+
+// HTTP Requests
+
 int main()
 {
     // Blinky Led
@@ -114,19 +117,11 @@ int main()
     WifiHelper::sntpSetTimezone(0);
     WifiHelper::sntpStartSync();
 
-    // WifiHelper::init() // cyw43_arch_init();
+    // Test HTTP Request
+    // TestTrans testTrans;
+    // testTrans.testTrans();
 
-    // enable sta mode on wifi
-    // cyw43_arch_enable_sta_mode();
-
-    // Configure ADC
-    // adc_init();
-
-    // initialize temparature sensor
-    // adc_set_temp_sensor_enabled(true);
-
-    // select 5th channel of adc as input
-    // adc_select_input(4);
+    // req.test();
 
     // LED Setup
     gpio_init(LED_PIN);
@@ -138,12 +133,6 @@ int main()
     // Set the TX and RX pins by using the function select on the GPIO
     gpio_set_function(UART_TX_PIN, GPIO_FUNC_UART);
 
-    // Connect to the WiFI network - loop until connected
-    // while (cyw43_arch_wifi_connect_timeout_ms(WIFI_SSID, WIFI_PASSWORD, CYW43_AUTH_WPA2_AES_PSK, 30000) != 0)
-    //{
-    //    printf("Attempting to connect...\n");
-    //}
-    // Print a success message once connected
     printf("Connected! \n");
 
     // Initialise web server
