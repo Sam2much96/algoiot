@@ -26,11 +26,8 @@
 #include "lwip/dns.h"
 #include "lwip/inet.h"
 #include "lwip/tcpip.h"
-#include "lwip/ip4_addr.h"
-#include "lwip/ip_addr.h"
-#include "lwip/sockets.h"
-#include "lwip/dns.h"
-// #include "lwip/apps/tftp_common.h"
+#include "lwip/sockets.h" //bugs out cuz of redefinitions between freertos sockets and lwip sockets
+// #include <wolfssl/options.h>
 #include <wolfssl/ssl.h>
 #include <wolfssl/certs_test.h>
 
@@ -70,7 +67,7 @@ public:
         return 0;
     }
 
-    void dns_found(const char *name, const ip_addr_t *ipaddr, void *callback_arg)
+    static void dns_found(const char *name, const ip_addr_t *ipaddr, void *callback_arg)
     {
         if (ipaddr != NULL)
         {

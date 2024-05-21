@@ -32,6 +32,8 @@ extern "C" {
 /* ------------------------------------------------------------------------- */
 /* Platform */
 /* ------------------------------------------------------------------------- */
+
+#define TARGET_EMBEDDED
 #undef  WOLFSSL_GENERAL_ALIGNMENT
 #define WOLFSSL_GENERAL_ALIGNMENT   4
 
@@ -624,8 +626,8 @@ extern unsigned int my_rng_seed_gen(void);
 #undef  NO_CODING
 //#define NO_CODING
 
-#undef  NO_ASN_TIME
-//#define NO_ASN_TIME
+//#undef  NO_ASN_TIME
+#define NO_ASN_TIME
 
 #undef  NO_CERTS
 //#define NO_CERTS
@@ -636,10 +638,11 @@ extern unsigned int my_rng_seed_gen(void);
 #undef WOLFSSL_IGNORE_FILE_WARN
 #define WOLFSSL_IGNORE_FILE_WARN
 
+#undef OPENSSL_ALL
+#define OPENSSL_EXTRA
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif /* WOLFSSL_USER_SETTINGS_H */
-

@@ -29,7 +29,9 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/include
     ${CMAKE_CURRENT_SOURCE_DIR}/include/utility
     ${CMAKE_CURRENT_SOURCE_DIR}/webserver
-
+    ${CMAKE_CURRENT_SOURCE_DIR}/port
+    ${CMAKE_CURRENT_SOURCE_DIR}/port/FreeRTOS-Kernel
+    ${CMAKE_CURRENT_SOURCE_DIR}/port/wolfssl
     # Impl Arduino Src
     #${ARDUINO_LIBS}
     #${ESP_LIBS}
@@ -84,6 +86,10 @@ add_executable(${PROGRAM_NAME}
     port/FreeRTOS-Kernel/IdleMemory.c
     port/FreeRTOS-Kernel/logging_levels.h
     port/FreeRTOS-Kernel/logging_stack.h
+
+    # WOlf SSL
+    port/wolfssl/myTime.c
+    #port/wolfssl/user_settings.h
    
 )
 

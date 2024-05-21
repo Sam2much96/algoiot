@@ -70,7 +70,7 @@
 #define WIFI_PASSWORD "rxlz8491"
 
 // HTTP Requests
-// #include "webserver/requests.hpp"
+#include "webserver/requests.hpp"
 
 // FreeRTOS OS Task Scheduler
 #include <FreeRTOS.h>
@@ -96,11 +96,10 @@ void server_task(void *pvParameters)
 void http_request_task(void *pvParameters)
 {
     // Test HTTP Request
-    // HTTPReq test;
-    // testTrans.testTrans();
+    HTTPReq test;
 
-    // test.test();
-    printf("Http Request is unimplemented");
+    test.test();
+    printf("Http Request is Started");
 };
 void uart_task(void *pvParameters)
 {
@@ -259,6 +258,7 @@ void start_tasks()
 
     xTaskCreate(wallet_task, "UART_TASK", 1024, NULL, 1, NULL);
     xTaskCreate(uart_task, "UART_TASK", 1024, NULL, 1, NULL);
+    xTaskCreate(http_request_task, "NET_TASK", 1024, NULL, 1, NULL);
 
     // Should start you scheduled Tasks (such as the LED_Task above)
     vTaskStartScheduler();
