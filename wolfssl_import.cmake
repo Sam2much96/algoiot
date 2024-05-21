@@ -91,8 +91,7 @@ target_sources(wolfssl PUBLIC
     ${WOLFSSL_DIR}/wolfcrypt/src/wolfmath.c
     
     ${WOLFSSL_PORT_DIR}/myTime.c
-
-    ${WOLFSSL_DIR}/wolfssl/ssl.h
+    
 
 )
 
