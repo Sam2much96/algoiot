@@ -1,14 +1,13 @@
-// WIFI Congfigurations
 // Common settings used in most of the pico_w examples
 // (see https://www.nongnu.org/lwip/2_1_x/group__lwip__opts.html for details)]
 
 // allow override in some examples
 #ifndef NO_SYS
-#define NO_SYS                      0
+#define NO_SYS                      1
 #endif
 // allow override in some examples
 #ifndef LWIP_SOCKET
-#define LWIP_SOCKET                 1
+#define LWIP_SOCKET                 0
 #endif
 #if PICO_CYW43_ARCH_POLL
 #define MEM_LIBC_MALLOC             1
@@ -91,10 +90,4 @@
 #define LWIP_HTTPD_CGI 1
 #define LWIP_HTTPD_SSI_INCLUDE_TAG 0
 #define HTTPD_FSDATA_FILE "htmldata.cpp"
-
-
-// for HTTP Requests
-#define LWIP_TIMEVAL_PRIVATE            0       /* Use the system-wide timeval definitions */
-#define LWIP_COMPAT_SOCKETS             1
-#define LWIP_POSIX_SOCKETS_IO_NAMES     0       /* Causes conflicts with normal file operations */
-#define LWIP_TCP_CLOSE_TIMEOUT_MS_DEFAULT   2000        /* Speed up socket close (alternative to enabling SO_LINGER) - default is 20 secs */
+#define MEMP_NUM_SYS_TIMEOUT        LWIP_NUM_SYS_TIMEOUT_INTERNAL + 8

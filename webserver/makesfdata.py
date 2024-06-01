@@ -3,13 +3,7 @@
 # This script is by @rspeir on GitHub: 
 # https://github.com/krzmaz/pico-w-webserver-example/pull/1/files/4b3e78351dd236f213da9bebbb20df690d470476#diff-e675c4a367e382db6f9ba61833a58c62029d8c71c3156a9f238b612b69de279d
 # Renamed output to avoid linking incorrect file
-#
-# Deconstructs html into memory addresses for C, & saves it into htmldata.cpp
-#
-# To DO :
-# (1) Host Manga on CPP Board via html inserts
-# (2) Add Basic styling to page
-# (3) Add Wallet Info
+
 import os
 import binascii
 
@@ -18,7 +12,7 @@ output = open('htmldata.cpp', 'w')
 
 #Traverse directory, generate list of files
 files = list()
-#os.chdir('./html_files')
+os.chdir('./html_files')
 for(dirpath, dirnames, filenames) in os.walk('.'):
     files += [os.path.join(dirpath, file) for file in filenames]
 

@@ -2,6 +2,10 @@
 #include "pico/cyw43_arch.h"
 #include "hardware/adc.h"
 
+// Wallet
+#include "../include/AlgoIoT.h"
+
+
 // SSI tags - tag length limited to 8 bytes by default
 const char * ssi_tags[] = {"volt","temp","led"};
 
@@ -48,6 +52,16 @@ void ssi_init() {
   adc_init();
   adc_set_temp_sensor_enabled(true);
   adc_select_input(4);
+
+
+  // Pass node debug to uart puts
+  // AlgoIot Wallet Setup
+  const char *app_name = "Whatever nggq\n";
+  const char *mnemonic = "tank game arrive train bring taxi tackle popular bacon gasp tell pigeon error step leaf zone suit chest next swim luggage oblige opinion about execute";
+  
+  //wallet
+  // create Algoiot object
+  AlgoIoT Wallet(app_name, mnemonic);
 
   http_set_ssi_handler(ssi_handler, ssi_tags, LWIP_ARRAYSIZE(ssi_tags));
 }

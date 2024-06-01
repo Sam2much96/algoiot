@@ -6,7 +6,7 @@
 </head>
 
 <body>
-    <h1>PicoW Webserver Tutorial</h1>
+    <h1>PicoW Webserver</h1>
     <br>
     <h2>This bit is SSI:</h2>
     <p>Voltage: <!--#volt--></p>
