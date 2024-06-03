@@ -2,16 +2,10 @@
 #define REQUESTS_H
 
 
-//#include <string.h>
-//#include <time.h>
 #include "lwip/apps/http_client.h"
 
-//#include "pico/stdlib.h"
-//#include "pico/cyw43_arch.h"
-//#include "lwip/pbuf.h"
-//#include "lwip/altcp_tcp.h"
-//#include "lwip/altcp_tls.h"
-#include "lwip/dns.h"
+
+//#include "lwip/dns.h"
 
 
 

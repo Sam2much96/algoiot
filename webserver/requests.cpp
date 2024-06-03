@@ -1,10 +1,12 @@
 // Documentation : https://www.unshiu.com/posts/pico-http-client-part-i-simple-client/
 // https://www.unshiu.com/posts/pico-http-client-part-iii-mbedtls/
-
+// https://mcuapplab.blogspot.com/2023/01/raspberry-pi-pico-w-c-sdk-lwip-ep-2.html?m=1
 // implementation connects mbedtls to lwip
 // class iplements two functons,
-// (1) http unsecure connections
-// (2) https secured connections
+// (1) http unsecure connections and api calls
+// To DO:
+// (1) https secured connections via mbedtls
+// (2) body received funtions
 
 #include "requests.h"
 
