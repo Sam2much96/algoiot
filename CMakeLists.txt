@@ -5,8 +5,8 @@ set(PROGRAM_NAME hello_world)
 set(PICO_BOARD pico_w)
 
 # Wolf SSL Libraries
-set(WOLFSSL_DIR "${CMAKE_CURRENT_LIST_DIR}/../lib/wolfssl" CACHE STRING "Course Common Lib" )
-include("wolfssl_import.cmake")
+#set(WOLFSSL_DIR "${CMAKE_CURRENT_LIST_DIR}/../lib/wolfssl" CACHE STRING "Course Common Lib" )
+#include("wolfssl_import.cmake")
 
 # initialize the SDK based on PICO_SDK_PATH
 # note: this must happen before project()
@@ -15,7 +15,7 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/include
     ${CMAKE_CURRENT_SOURCE_DIR}/include/utility
     ${CMAKE_CURRENT_SOURCE_DIR}/webserver
-
+ 
     )
 
 project(my_project)
@@ -50,9 +50,12 @@ add_executable(${PROGRAM_NAME}
     ${PICO_SDK_PATH}/lib/lwip/src/apps/sntp/sntp.c
 
     # Wolf ssl
-    ${WOLFSSL_DIR}/wolfcrypt/test/test.c
-    ${WOLFSSL_DIR}/wolfcrypt/src/ed25519.c
+    #${WOLFSSL_DIR}/wolfcrypt/test/test.c
+    #${WOLFSSL_DIR}/wolfcrypt/src/ed25519.c
     
+    # API requests
+    webserver/requests.cpp
+    #${PICO_SDK_PATH}/lib/lwip/src/apps/altcp_tls/altcp_tls_mbedtls.c
    
     )
 
@@ -64,14 +67,21 @@ target_link_libraries(
     pico_stdlib
     hardware_adc
 
+    # for local server http hosting
     pico_cyw43_arch_lwip_threadsafe_background
     pico_lwip_http
+
+    #mbedtls for requests & api calls
+    #pico_lwip_mbedtls
+    pico_mbedtls
+    #pico_cyw43_arch_lwip_poll    
+
 
     #real time clock
     hardware_rtc
 
     # wolfssl
-    wolfssl
+    #wolfssl
     )
 
 #Usb and  Uart Serial Output# 

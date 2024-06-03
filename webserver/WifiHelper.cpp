@@ -203,7 +203,7 @@ int WifiHelper::sntpAddServer(const char *server)
 
 	ip_addr_t *t; // construct ippaddr enum
 	int err = ipaddr_aton(server, t);
-	printf("Added SNTP Server: %d", err);
+	printf("Added SNTP Server: %d\n", err);
 	sntp_setserver(WifiHelper::sntpServerCount++, t);
 	return err;
 }

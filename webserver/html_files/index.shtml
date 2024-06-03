@@ -3,6 +3,78 @@
 
 <head>
     <title>PicoW Webserver</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        h2 {
+            color: #333;
+            animation: slideIn 1.5s ease-in-out;
+        }
+
+        p {
+            font-size: 1.2em;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        p:hover {
+            transform: scale(1.1);
+            color: #ff6347;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #53be57;
+            transform: scale(1.1);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(-100%);
+            }
+
+            to {
+                transform: translateX(0);
+            }
+        }
+
+        #box {
+            width: 100px;
+            height: 100px;
+            background-color: #38ab3c;
+            margin: 20px auto;
+            position: relative;
+            transition: transform 0.5s ease-in-out;
+        }
+    </style>
 </head>
 
 <body>
@@ -19,6 +91,8 @@
     <br>
     <br>
     <a href="/index.shtml">Refresh</a>
+
+
 </body>
 
 </html>

@@ -28,9 +28,9 @@
 #include <stdint.h>
 #include <Crypto.h>
 #include <base64.hpp>
-#include "wolfssl/wolfcrypt/settings.h"
-#include "wolfssl/wolfcrypt/ed25519.h"
-#include <wolfcrypt/test/test.h>
+// #include "wolfssl/wolfcrypt/settings.h"
+// #include "wolfssl/wolfcrypt/ed25519.h"
+// #include <wolfcrypt/test/test.h>
 #include <Ed25519.h>
 #include "base32decode.h" // Base32 decoding for Algorand addresses
 #include "bip39enwords.h" // BIP39 english words to convert Algorand private key from mnemonics
@@ -95,21 +95,7 @@ AlgoIoT::AlgoIoT(const char *sAppName, const char *nodeAccountMnemonics)
     return;
   }
 
-  // Derive public key = sender address ( = this node address) from private key
-  // Ed25519::derivePublicKey(m_senderAddressBytes, m_privateKey);
-  // ed25519_key key;
-  int ret;
-  wc_ed25519_init(nodeAccountMnemonics);
-  // wc_ed25519_import_private_only(m_privateKey, sizeof(m_privateKey, &key));
-  //  ret = wc_ed25519_make_public(&key, m_senderAddressBytes, sizeof(m_senderAddressBytes));
-  //  if (ret != 0)
-  //{
-  //   printf(" Error Making Public Key %d \n", ret);
-  // }
-
-  ret = wolfcrypt_test(NULL);
-  printf("End: %d\n", ret);
-  printf("Public Key Raw: %d", m_senderAddressBytes);
+  printf("Public Key Raw: %d\n", m_senderAddressBytes);
   // By default, use current (sender) address as destination address (transaction to self)
   // User may set a different address later, with appropriate setter
   m_receiverAddressBytes = (uint8_t *)malloc(ALGORAND_ADDRESS_BYTES);
