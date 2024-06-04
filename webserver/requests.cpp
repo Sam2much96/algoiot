@@ -1,6 +1,8 @@
 // Documentation : https://www.unshiu.com/posts/pico-http-client-part-i-simple-client/
 // https://www.unshiu.com/posts/pico-http-client-part-iii-mbedtls/
 // https://mcuapplab.blogspot.com/2023/01/raspberry-pi-pico-w-c-sdk-lwip-ep-2.html?m=1
+// https://github.com/marceloalcocer/picohttps
+//// https://github.com/espressif/arduino-esp32/blob/master/libraries/HTTPClient/src/HTTPClient.h
 // implementation connects mbedtls to lwip
 // class iplements two functons,
 // (1) http unsecure connections and api calls

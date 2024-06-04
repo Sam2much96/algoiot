@@ -31,13 +31,13 @@
 #ifndef __ALGOIOT_H
 #define __ALGOIOT_H
 
-//#include <Arduino.h> // Arduino Crypto Libs: https://github.com/rweather/arduinolibs
+#include <Arduino.h> // Arduino Crypto Libs: https://github.com/rweather/arduinolibs
 #include <stdint.h>
 #include <string>
 
-// Http client replaced with : https://github.com/marceloalcocer/picohttps
-// replace http client with libcurl for http requests
-// #include <HTTPClient.h> // https://github.com/espressif/arduino-esp32/blob/master/libraries/HTTPClient/src/HTTPClient.h
+// Http client replaced with my custom requests.cpp for pico w 
+// 
+// #include <HTTPClient.h> 
 #include "ArduinoJson.h"  // JSON needed for Algorand transactions. ArduinoJson because: https://arduinojson.org/news/2019/11/19/arduinojson-vs-arduino_json/
 #include "minmpk.h"
 // #include "algoiot_user_config.h" // temporarily disabling
@@ -124,8 +124,11 @@ class AlgoIoT
   // outBinaryAddress allocated internally, has to be freed by caller
   // Returns error code (0 = OK)
   int decodeAlgorandAddress(const char* addressB32, uint8_t*& outBinaryAddress);
-
-
+  
+  uint8_t* getPublicKey(); 
+  void calculateChecksum(const uint8_t* publicKey, uint8_t* checksum); // used for generating algorand address 
+  void generateAlgorandAddress(const uint8_t* publicKey, uint8_t* address);
+  
   // Decodes Base64 Algorand network hash to 32-byte binary buffer suitable for our functions
   // outBinaryHash allocated internally, has to be freed by caller
   // Returns error code (0 = OK)

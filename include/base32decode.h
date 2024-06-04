@@ -8,6 +8,7 @@
 #define _Base32_h
 
 #include "stdint.h"
+#include <string>
 
 class Base32
 {
@@ -18,6 +19,11 @@ class Base32
     /// @param out Decoded buffer, allocated internally (to be freed by caller)
     /// @return length of decoded buffer (0 if error occurred)
     static int fromBase32(uint8_t* in, const int length, uint8_t*& out);
+
+    static std::string toBase32(const uint8_t* data, const int length, std::string encoded);
+  private: 
+    
+    static const char base32Alphabet[32];
 };
 
 #endif

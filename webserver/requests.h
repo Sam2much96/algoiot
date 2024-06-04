@@ -5,8 +5,6 @@
 #include "lwip/apps/http_client.h"
 
 
-//#include "lwip/dns.h"
-
 
 
 extern const char *post_data;
@@ -22,6 +20,7 @@ static struct altcp_tls_config *tls_config = NULL;
 
 // Replace this with the actual CA certificate in PEM format
 extern const char *ca_cert_pem;
+
 
 // Function to make an HTTPS POST request
 void https_get_request();

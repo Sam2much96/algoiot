@@ -26,6 +26,7 @@
 // Wallet Setup
 // #define Wallet AlgoIoT// Wallet
 #include "include/AlgoIoT.h"
+#include "include/base32decode.h"
 
 // Wifi and Web Server
 #include "lwip/apps/httpd.h"
@@ -38,10 +39,10 @@
 #include "webserver/cgi.h"
 
 // for API calls and requests
-#include "webserver/requests.h"
+// #include "webserver/requests.h"
 
 #define WIFI_SSID "itel A60"     //"Galaxy A0220d1"
-#define WIFI_PASSWORD "00000001" //"rxlz8491"
+#define WIFI_PASSWORD "00000001" // "rxlz8491"
 int main()
 {
     // Blinky Led
@@ -104,43 +105,49 @@ int main()
     WifiHelper::sntpSetTimezone(0);
     WifiHelper::sntpStartSync();
 
-    // make request to api server
-    //
-    https_get_request();
-
-    sleep_ms(10000);
-    printf("10 second timeout done");
-    // Initialise web server
-    // httpd_init();
-    // printf("Http server initialised\n");
-
-    // Configure SSI and CGI handler
-    // ssi_init();
-    // printf("SSI Handler initialised\n");
-    // cgi_init();
-    // printf("CGI Handler initialised\n");
-
     // Set up our UART with the required speed.
     uart_init(UART_ID, BAUD_RATE);
 
     // Set the TX and RX pins by using the function select on the GPIO
     gpio_set_function(UART_TX_PIN, GPIO_FUNC_UART);
 
-    const char *mnemonicQr = "tank game arrive train bring taxi tackle popular bacon gasp tell pigeon error step leaf zone suit chest next swim luggage oblige opinion about execute \n";
-    // Pass node debug to uart puts
-    // AlgoIot Wallet Setup
+    // const char *mnemonicQr = "tank game arrive train bring taxi tackle popular bacon gasp tell pigeon error step leaf zone suit chest next swim luggage oblige opinion about execute \n";
+    //  Pass node debug to uart puts
+    //  AlgoIot Wallet Setup
     const char *app_name = "Whatever nggq\n";
     const char *mnemonic = "tank game arrive train bring taxi tackle popular bacon gasp tell pigeon error step leaf zone suit chest next swim luggage oblige opinion about execute";
 
     // wallet
     //  create Algoiot object
     AlgoIoT Wallet(app_name, mnemonic);
+    uint8_t address[36];
+
+    // Derive the Algorand address (public key) from the private key
+    Wallet.generateAlgorandAddress(Wallet.m_senderAddressBytes, address);
+
+    // Print the derived address
+    printf("pub key: %d", (char *)Wallet.m_senderAddressBytes);
+
+    sleep_ms(10000);
+    // make request to api server
+    //
+    // https_get_request();
+
+    // Initialise web server
+    httpd_init();
+    printf("Http server initialised\n");
+
+    // Configure SSI and CGI handler
+    ssi_init();
+    printf("SSI Handler initialised\n");
+    cgi_init();
+    printf("CGI Handler initialised\n");
 
     while (true)
     {
 
         // Blink LED
-        uart_puts(UART_ID, mnemonicQr); // Send Board data as output via Uart, send as Json Document
-        sleep_ms(3000);                 // sleep for 3 secs
+        uart_puts(UART_ID, mnemonic); // Send Board data as output via Uart, send as Json Document
+        sleep_ms(3000);               // sleep for 3 secs
     }
 }

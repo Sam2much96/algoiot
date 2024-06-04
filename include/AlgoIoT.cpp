@@ -28,14 +28,13 @@
 #include <stdint.h>
 #include <Crypto.h>
 #include <base64.hpp>
-// #include "wolfssl/wolfcrypt/settings.h"
-// #include "wolfssl/wolfcrypt/ed25519.h"
-// #include <wolfcrypt/test/test.h>
 #include <Ed25519.h>
-#include "base32decode.h" // Base32 decoding for Algorand addresses
+// #include "base32decode.h" // Base32 decoding for Algorand addresses
+#include "Base32.h"
+// #include "base32encode.h"
 #include "bip39enwords.h" // BIP39 english words to convert Algorand private key from mnemonics
 #include <AlgoIoT.h>
-
+#include "SHA512.h"
 #include <stdbool.h> // for error and bug fixes, remove later
 // Debug Outputs
 // Log To SD Card
@@ -95,9 +94,11 @@ AlgoIoT::AlgoIoT(const char *sAppName, const char *nodeAccountMnemonics)
     return;
   }
 
-  printf("Public Key Raw: %d\n", m_senderAddressBytes);
-  // By default, use current (sender) address as destination address (transaction to self)
-  // User may set a different address later, with appropriate setter
+  // Derive public key = sender address ( = this node address) from private key
+  Ed25519::derivePublicKey(m_senderAddressBytes, m_privateKey);
+  // printf("Public Key Raw: %d\n", m_senderAddressBytes);
+  //  By default, use current (sender) address as destination address (transaction to self)
+  //  User may set a different address later, with appropriate setter
   m_receiverAddressBytes = (uint8_t *)malloc(ALGORAND_ADDRESS_BYTES);
   if (!m_receiverAddressBytes)
   {
@@ -108,6 +109,52 @@ AlgoIoT::AlgoIoT(const char *sAppName, const char *nodeAccountMnemonics)
     return;
   }
   memcpy((void *)(&(m_receiverAddressBytes[0])), m_senderAddressBytes, ALGORAND_ADDRESS_BYTES);
+}
+
+void AlgoIoT::calculateChecksum(const uint8_t *publicKey, uint8_t *checksum)
+{
+  uint8_t hash[64];
+  SHA512 sha512;
+
+  sha512.update(publicKey, ALGORAND_ADDRESS_BYTES);
+  sha512.finalize(hash, sizeof(hash));
+
+  memcpy(checksum, hash, 4); // how to get the last 4 bytes of this hash and append it to checksum?
+}
+
+// Documentation : https://developer.algorand.org/docs/get-details/accounts/
+// https://forum.algorand.org/t/how-is-an-algorands-address-made/960/4
+void AlgoIoT::generateAlgorandAddress(const uint8_t *publicKey, uint8_t *address)
+{
+  uint8_t addressBytes[ALGORAND_ADDRESS_BYTES + 4]; // empty address bytes
+  uint8_t checksum[4];
+
+  // bug :
+  // memcpy is writing the data over rather than concatonating it
+  // Copy the public key to the addressBytes array
+  memcpy(addressBytes, publicKey, sizeof(addressBytes));
+
+  // Calculate the checksum and append it to the public key
+  calculateChecksum(publicKey, checksum);
+  memcpy(addressBytes + ALGORAND_ADDRESS_BYTES, checksum, 4); // this line cause error and overwrites the data to 4 bytes
+
+  // Encode the result in base32
+  Base32::toBase32(addressBytes, sizeof(addressBytes), address);
+  printf("addr3 %d \n", sizeof(address));
+  printf("addr5 %d \n", sizeof(addressBytes));
+  char buffer[58]; // 58 character wallet address
+  sprintf(buffer, "%X", address);
+  printf("Address debug: %d \n", buffer);
+  printf("Pub K debug: %d \n", sizeof(m_senderAddressBytes));
+  printf("Priv K debug: %d \n", sizeof(m_privateKey));
+
+  printf("addr4 %d \n", sizeof(buffer));
+  printf("addr2 %d \n", addressBytes);
+}
+
+uint8_t *AlgoIoT::getPublicKey()
+{
+  return m_senderAddressBytes;
 }
 
 int AlgoIoT::setDestinationAddress(const char *algorandAddress)
@@ -511,6 +558,7 @@ int AlgoIoT::decodeAlgorandNetHash(const char *hashB64, uint8_t *&outBinaryHash)
   return 0;
 }
 
+// Decodes an Algorand Address into Binary bytes for sending
 int AlgoIoT::decodeAlgorandAddress(const char *addressB32, uint8_t *&outBinaryAddress)
 {
   if (addressB32 == NULL)
@@ -528,6 +576,10 @@ int AlgoIoT::decodeAlgorandAddress(const char *addressB32, uint8_t *&outBinaryAd
 
 int AlgoIoT::decodePrivateKeyFromMnemonics(const char *inMnemonicWords, uint8_t privateKey[ALGORAND_KEY_BYTES])
 {
+
+  // To Do : Modify this code to store the 32 byte public key generated
+  // There should be a second 32 byte public key as well
+  // docs : https://developer.algorand.org/docs/get-details/accounts/
   uint16_t indexes11bit[ALGORAND_MNEMONICS_NUMBER];
   uint8_t decodedBytes[ALGORAND_KEY_BYTES + 3];
   // char      checksumWord[ALGORAND_MNEMONIC_MAX_LEN + 1] = "";
@@ -575,6 +627,7 @@ int AlgoIoT::decodePrivateKeyFromMnemonics(const char *inMnemonicWords, uint8_t 
       }
       pos++;
     }
+    // Error Catchers
     if (!found)
     {
       free(mnemonicWords);

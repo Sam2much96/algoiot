@@ -42,7 +42,7 @@ add_executable(${PROGRAM_NAME}
     include/Hash.cpp
     include/BigNumberUtil.cpp
     include/Crypto.cpp
-
+    include/Base32.cpp
     #WifiHelper
     webserver/WifiHelper.cpp
     
