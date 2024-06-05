@@ -7,6 +7,8 @@
 import os
 import binascii
 
+print("Running Makesfdata.py----->")
+
 #Create file to write output into
 output = open('htmldata.cpp', 'w') 
 

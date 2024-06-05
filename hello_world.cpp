@@ -43,6 +43,9 @@
 
 #define WIFI_SSID "itel A60"     //"Galaxy A0220d1"
 #define WIFI_PASSWORD "00000001" // "rxlz8491"
+
+#define APP_NAME "Hardware Wallet Dev"
+#define MNEMONIC "tank game arrive train bring taxi tackle popular bacon gasp tell pigeon error step leaf zone suit chest next swim luggage oblige opinion about execute"
 int main()
 {
     // Blinky Led
@@ -50,8 +53,8 @@ int main()
         To DO:
         (1) Setup Uart As debug (Done)
         (2) Setup SD Card as Logging
-        (3) Build Wallet and Send Outupt to Uart debug
-        (4) Implement CUstom HTTP CLient CLass
+        (3) Build Wallet and Send Outupt to Uart debug (Done)
+        (4) Implement CUstom HTTP CLient CLass (Done)
         (5) Implement Port Forwarding
         (6) Data to send should be json
         (7) Implement Webserver for Board A
@@ -64,6 +67,17 @@ int main()
 
     // init all io for serial and usb debugging
     stdio_init_all();
+
+    printf("StartUp------->");
+    // 5 secs wait for debugging
+    sleep_ms(5000);
+    // wallet
+    //  create Algoiot object
+    AlgoIoT Wallet(APP_NAME, MNEMONIC);
+    uint8_t *address;
+
+    // Derive the Algorand address (public key) from the private key
+    Wallet.generateAlgorandAddress(Wallet.m_senderAddressBytes, address);
 
     // init wifi
 
@@ -114,20 +128,9 @@ int main()
     // const char *mnemonicQr = "tank game arrive train bring taxi tackle popular bacon gasp tell pigeon error step leaf zone suit chest next swim luggage oblige opinion about execute \n";
     //  Pass node debug to uart puts
     //  AlgoIot Wallet Setup
-    const char *app_name = "Whatever nggq\n";
-    const char *mnemonic = "tank game arrive train bring taxi tackle popular bacon gasp tell pigeon error step leaf zone suit chest next swim luggage oblige opinion about execute";
-
-    // wallet
-    //  create Algoiot object
-    AlgoIoT Wallet(app_name, mnemonic);
-    uint8_t address[36];
-
-    // Derive the Algorand address (public key) from the private key
-    Wallet.generateAlgorandAddress(Wallet.m_senderAddressBytes, address);
 
     // Print the derived address
-    printf("pub key: %d", (char *)Wallet.m_senderAddressBytes);
-
+    // printf("pub key: %d", (char *)Wallet.m_senderAddressBytes);
     sleep_ms(10000);
     // make request to api server
     //
@@ -147,7 +150,7 @@ int main()
     {
 
         // Blink LED
-        uart_puts(UART_ID, mnemonic); // Send Board data as output via Uart, send as Json Document
+        uart_puts(UART_ID, MNEMONIC); // Send Board data as output via Uart, send as Json Document
         sleep_ms(3000);               // sleep for 3 secs
     }
 }

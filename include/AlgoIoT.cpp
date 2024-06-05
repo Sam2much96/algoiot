@@ -29,9 +29,9 @@
 #include <Crypto.h>
 #include <base64.hpp>
 #include <Ed25519.h>
-// #include "base32decode.h" // Base32 decoding for Algorand addresses
-#include "Base32.h"
-// #include "base32encode.h"
+#include "base32decode.h" // Base32 decoding for Algorand addresses
+// #include "Base32.h"
+//  #include "base32encode.h"
 #include "bip39enwords.h" // BIP39 english words to convert Algorand private key from mnemonics
 #include <AlgoIoT.h>
 #include "SHA512.h"
@@ -116,40 +116,93 @@ void AlgoIoT::calculateChecksum(const uint8_t *publicKey, uint8_t *checksum)
   uint8_t hash[64];
   SHA512 sha512;
 
-  sha512.update(publicKey, ALGORAND_ADDRESS_BYTES);
+  // generate sha 512 hash of public key
+  sha512.update(publicKey, sizeof(publicKey));
   sha512.finalize(hash, sizeof(hash));
 
-  memcpy(checksum, hash, 4); // how to get the last 4 bytes of this hash and append it to checksum?
+  // store last 4 bytes of public key hash
+  for (int i = 0; i < 4; i++)
+  {
+    checksum[i] = hash[60 + i];
+  }
+  // memcpy(checksum, hash, 4); // how to get the last 4 bytes of this hash and append it to checksum?
 }
 
 // Documentation : https://developer.algorand.org/docs/get-details/accounts/
 // https://forum.algorand.org/t/how-is-an-algorands-address-made/960/4
 void AlgoIoT::generateAlgorandAddress(const uint8_t *publicKey, uint8_t *address)
 {
-  uint8_t addressBytes[ALGORAND_ADDRESS_BYTES + 4]; // empty address bytes
-  uint8_t checksum[4];
 
+  uint8_t checksum[4];                                             // add a null to end of checksum
+  uint8_t addressBytes[ALGORAND_ADDRESS_BYTES + sizeof(checksum)]; // empty address bytes
   // bug :
   // memcpy is writing the data over rather than concatonating it
   // Copy the public key to the addressBytes array
   memcpy(addressBytes, publicKey, sizeof(addressBytes));
 
-  // Calculate the checksum and append it to the public key
+  // Calculate the checksum
   calculateChecksum(publicKey, checksum);
-  memcpy(addressBytes + ALGORAND_ADDRESS_BYTES, checksum, 4); // this line cause error and overwrites the data to 4 bytes
+  // memcpy(addressBytes + ALGORAND_ADDRESS_BYTES, checksum, 4); // this line cause error and overwrites the data to 4 bytes
 
+  // concatonate checksum and publick key
+  for (int i = 0; i < 4; i++)
+  {
+    addressBytes[32 + i] = checksum[i];
+  }
   // Encode the result in base32
-  Base32::toBase32(addressBytes, sizeof(addressBytes), address);
-  printf("addr3 %d \n", sizeof(address));
-  printf("addr5 %d \n", sizeof(addressBytes));
-  char buffer[58]; // 58 character wallet address
-  sprintf(buffer, "%X", address);
-  printf("Address debug: %d \n", buffer);
-  printf("Pub K debug: %d \n", sizeof(m_senderAddressBytes));
-  printf("Priv K debug: %d \n", sizeof(m_privateKey));
+  // use a for loop
+  // for (int i = 0; i < 36 ; i++)
+  //{
+  // temp = addressBytes[i];
+  //}
 
-  printf("addr4 %d \n", sizeof(buffer));
-  printf("addr2 %d \n", addressBytes);
+  int iErr = 11;
+  // iErr = Base32::toBase32(addressBytes, sizeof(addressBytes), address);
+
+  if (iErr == ALGOIOT_ADDRESS_GEN_ERROR)
+  {
+
+    // To DO :
+    // (1) Run Encoding Test
+    std::string s_test;
+    std::string c_test;
+    // string cat as ascii c,a,t, null
+    uint8_t bytetest[4] = {99, 97, 116, 00};
+    uint8_t *out_bytetest;
+    // cat as const
+    const char *cat = "cat";
+
+    int cat_length = strlen(cat);
+
+    // convert const char* to uint8_t
+    const uint8_t *catBytes = reinterpret_cast<const uint8_t *>(cat);
+
+    // try encoding to ascii test
+    Base32::toBase32(catBytes, cat_length, c_test);
+
+    // base32 converter is buggy
+    Base32::toBase32_v2(bytetest, sizeof(bytetest), out_bytetest, true);
+
+    Base32::toBase32_v2(addressBytes, sizeof(addressBytes), address, true);
+
+    printf("Test 0:%s\n", bytetest);     // reproduces byte as ascii string
+    printf("Testa: %s\n", out_bytetest); // should produce  MYQG====
+
+    printf("Test1: %u\n", s_test); // should produce  MYQG====
+    printf("Test2: %s\n", c_test);
+    printf("Base32 Encoded Output: %s\n", address);
+    // printf("Base 32 addr size: %u \n", address.length());
+    printf("Base 8 addr Sze + Checksum:  %u \n", sizeof(addressBytes));
+
+    // char buffer[58]; // 58 character wallet address
+    // sprintf(buffer, "%X", address);
+    // printf("Address debug: %d \n", buffer);
+    printf("Pub K debug: %d \n", m_senderAddressBytes);
+    printf("Priv K debug: %c \n", m_privateKey);
+
+    printf("%d", address);
+    // printf("addr4 %d \n", sizeof(buffer));
+  }
 }
 
 uint8_t *AlgoIoT::getPublicKey()
@@ -577,9 +630,6 @@ int AlgoIoT::decodeAlgorandAddress(const char *addressB32, uint8_t *&outBinaryAd
 int AlgoIoT::decodePrivateKeyFromMnemonics(const char *inMnemonicWords, uint8_t privateKey[ALGORAND_KEY_BYTES])
 {
 
-  // To Do : Modify this code to store the 32 byte public key generated
-  // There should be a second 32 byte public key as well
-  // docs : https://developer.algorand.org/docs/get-details/accounts/
   uint16_t indexes11bit[ALGORAND_MNEMONICS_NUMBER];
   uint8_t decodedBytes[ALGORAND_KEY_BYTES + 3];
   // char      checksumWord[ALGORAND_MNEMONIC_MAX_LEN + 1] = "";

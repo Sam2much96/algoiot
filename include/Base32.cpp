@@ -9,88 +9,55 @@
 #include "stdint.h"
 #include <string.h>
 #include <cmath>
-
+#include <stdlib.h>
 // Base32::Base32()
 //{
 // }
 
-int Base32::toBase32(uint8_t *in, const int length, uint8_t *&out)
+// int Base32::toBase32(uint8_t *in, const int length, uint8_t *&out)
+//{
+//     return toBase32(in, length, out, false);
+// }
+
+std::string Base32::toBase32(const uint8_t *data, const int length, std::string encoded)
 {
-    return toBase32(in, length, out, true);
-}
+    if (data == nullptr || length <= 0)
+        return "";
 
-int Base32::toBase32(uint8_t *in, const int length, uint8_t *&out, bool usePadding)
-{
-    char base32StandardAlphabet[] = {"ABCDEFGHIJKLMNOPQRSTUVWXYZ234567"};
-    char standardPaddingChar = '=';
+    // std::string encoded;
+    encoded.reserve((length + 4) / 5 * 8); // Reserve enough space for the output
 
-    int result = 0;
-    int count = 0;
-    int bufSize = 8;
-    int index = 0;
-    int size = 0; // size of temporary array
-    uint8_t *temp = NULL;
+    int buffer = 0;
+    int bitsLeft = 0;
 
-    if (length < 0 || length > 268435456LL)
+    for (int i = 0; i < length; ++i)
     {
-        return 0;
-    }
+        buffer <<= 8;
+        buffer |= data[i] & 0xFF;
+        bitsLeft += 8;
 
-    size = 8 * ceil(length / 4.0);  // Calculating size of temporary array. Not very precise.
-    temp = (uint8_t *)malloc(size); // Allocating temporary array.
-
-    if (length > 0)
-    {
-        int buffer = in[0];
-        int next = 1;
-        int bitsLeft = 8;
-
-        while (count < bufSize && (bitsLeft > 0 || next < length))
+        while (bitsLeft >= 5)
         {
-            if (bitsLeft < 5)
-            {
-                if (next < length)
-                {
-                    buffer <<= 8;
-                    buffer |= in[next] & 0xFF;
-                    next++;
-                    bitsLeft += 8;
-                }
-                else
-                {
-                    int pad = 5 - bitsLeft;
-                    buffer <<= pad;
-                    bitsLeft += pad;
-                }
-            }
-            index = 0x1F & (buffer >> (bitsLeft - 5));
-
+            encoded += base32Alphabet[(buffer >> (bitsLeft - 5)) & 0x1F];
             bitsLeft -= 5;
-            temp[result] = (uint8_t)base32StandardAlphabet[index];
-            result++;
         }
     }
 
-    if (usePadding)
+    if (bitsLeft > 0)
     {
-        int pads = (result % 8);
-        if (pads > 0)
-        {
-            pads = (8 - pads);
-            for (int i = 0; i < pads; i++)
-            {
-                temp[result] = standardPaddingChar;
-                result++;
-            }
-        }
+        buffer <<= (5 - bitsLeft);
+        encoded += base32Alphabet[buffer & 0x1F];
     }
 
-    out = (uint8_t *)malloc(result);
-    memcpy(out, temp, result);
-    free(temp);
+    // Padding to make the output length a multiple of 8
+    while (encoded.size() % 8 != 0)
+    {
+        encoded += '=';
+    }
 
-    return result;
+    return encoded;
 }
+
 int Base32::fromBase32(uint8_t *in, const int length, uint8_t *&out)
 {
     int result = 0; // Length of the array of decoded values.

@@ -18,8 +18,8 @@ class Base32
 {
   public:
     //Base32();
-    static int toBase32(uint8_t *in, const int length , uint8_t *&out);
-    static int toBase32(uint8_t *in, const int length, uint8_t *& out, bool);
+    static std::string toBase32(uint8_t *data, const int length , std::string encoded);
+    //static int toBase32(uint8_t *in, const int length, uint8_t *& out, bool);
     static int fromBase32(uint8_t *in, const int length, uint8_t *&out);
 };
 

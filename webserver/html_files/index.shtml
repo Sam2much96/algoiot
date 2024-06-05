@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>PicoW Webserver</title>
+    <title>Hardware Wallet Dev</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -78,7 +78,7 @@
 </head>
 
 <body>
-    <h1>PicoW Webserver</h1>
+    <h1>Hardware Wallet Dev</h1>
     <br>
     <h2>This bit is SSI:</h2>
     <p>Voltage: <!--#volt--></p>

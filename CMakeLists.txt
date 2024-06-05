@@ -26,7 +26,7 @@ pico_sdk_init()
 
 # for parsing html as c file
 # doesnt work
-message("Running makefsdata python script")
+# message("Running makefsdata python script")
 execute_process(COMMAND
     py ${CMAKE_CURRENT_SOURCE_DIR}/webserver/makefsdata.py
     WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}
@@ -42,7 +42,7 @@ add_executable(${PROGRAM_NAME}
     include/Hash.cpp
     include/BigNumberUtil.cpp
     include/Crypto.cpp
-    include/Base32.cpp
+    include/base32decode.cpp
     #WifiHelper
     webserver/WifiHelper.cpp
     

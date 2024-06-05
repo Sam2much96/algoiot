@@ -1,5 +1,16 @@
 #!/bin/bash 
 
+# Pico W COmpile
+
+# Cnvert Webserver for C++ Datatypre
+$( echo "Running makefsdata python script\n" )
+$(cd webserver && python3 makesfdata.py && cd ../build)
+
+# Make Script
+$(cmake .. && make ) 
+
+
+# G++ Linux COmpile
 
 $(g++ hello_world.cpp \
 -I include  \
