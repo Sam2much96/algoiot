@@ -164,21 +164,10 @@ void AlgoIoT::generateAlgorandAddress(const uint8_t *publicKey, uint8_t *address
 
     // To DO :
     // (1) Run Encoding Test
-    std::string s_test;
-    std::string c_test;
+
     // string cat as ascii c,a,t, null
     uint8_t bytetest[4] = {99, 97, 116, 00};
     uint8_t *out_bytetest;
-    // cat as const
-    const char *cat = "cat";
-
-    int cat_length = strlen(cat);
-
-    // convert const char* to uint8_t
-    const uint8_t *catBytes = reinterpret_cast<const uint8_t *>(cat);
-
-    // try encoding to ascii test
-    Base32::toBase32(catBytes, cat_length, c_test);
 
     // base32 converter is buggy
     Base32::toBase32_v2(bytetest, sizeof(bytetest), out_bytetest, true);
@@ -188,8 +177,6 @@ void AlgoIoT::generateAlgorandAddress(const uint8_t *publicKey, uint8_t *address
     printf("Test 0:%s\n", bytetest);     // reproduces byte as ascii string
     printf("Testa: %s\n", out_bytetest); // should produce  MYQG====
 
-    printf("Test1: %u\n", s_test); // should produce  MYQG====
-    printf("Test2: %s\n", c_test);
     printf("Base32 Encoded Output: %s\n", address);
     // printf("Base 32 addr size: %u \n", address.length());
     printf("Base 8 addr Sze + Checksum:  %u \n", sizeof(addressBytes));

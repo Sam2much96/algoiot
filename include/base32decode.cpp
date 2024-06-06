@@ -144,6 +144,7 @@ int Base32::toBase32(const uint8_t *data, const int length, std::string encoded)
 
 int Base32::toBase32_v2(uint8_t *in, const int length, uint8_t *&out, bool usePadding)
 {
+  // Documentation : https://github.com/NetRat/Base32/blob/master/Base32.cpp
   // works but somewhat not imprecise,
   // bugs
   // (1) doent account for null termination of ascii
@@ -162,7 +163,7 @@ int Base32::toBase32_v2(uint8_t *in, const int length, uint8_t *&out, bool usePa
     return 0;
   }
 
-  size = 8 * ceil(length / 4.0);  // Calculating size of temporary array. Not very precise.
+  size = 8 * ceil(length / 4.0);  // Calculating size of temporary array. Not very precise. Doesn't account for null termination in ascii
   temp = (uint8_t *)malloc(size); // Allocating temporary array.
 
   if (length > 0)
