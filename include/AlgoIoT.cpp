@@ -130,11 +130,11 @@ void AlgoIoT::calculateChecksum(const uint8_t *publicKey, uint8_t *checksum)
 
 // Documentation : https://developer.algorand.org/docs/get-details/accounts/
 // https://forum.algorand.org/t/how-is-an-algorands-address-made/960/4
-void AlgoIoT::generateAlgorandAddress(const uint8_t *publicKey, uint8_t *address)
+uint8_t *AlgoIoT::generateAlgorandAddress(const uint8_t *publicKey, uint8_t *address)
 {
-
-  uint8_t checksum[4];                                             // add a null to end of checksum
-  uint8_t addressBytes[ALGORAND_ADDRESS_BYTES + sizeof(checksum)]; // empty address bytes
+  int iErr = 11;
+  uint8_t checksum[4];
+  uint8_t addressBytes[ALGORAND_ADDRESS_BYTES + sizeof(checksum)]; // size of pub key + 4 byte checksu, + 1 byte null terminator
   // bug :
   // memcpy is writing the data over rather than concatonating it
   // Copy the public key to the addressBytes array
@@ -148,16 +148,11 @@ void AlgoIoT::generateAlgorandAddress(const uint8_t *publicKey, uint8_t *address
   for (int i = 0; i < 4; i++)
   {
     addressBytes[32 + i] = checksum[i];
-  }
-  // Encode the result in base32
-  // use a for loop
-  // for (int i = 0; i < 36 ; i++)
-  //{
-  // temp = addressBytes[i];
-  //}
 
-  int iErr = 11;
-  // iErr = Base32::toBase32(addressBytes, sizeof(addressBytes), address);
+    // add end of string termination
+  }
+
+  // Base32::toBase32_v2(addressBytes, sizeof(addressBytes), address, true);
 
   if (iErr == ALGOIOT_ADDRESS_GEN_ERROR)
   {
@@ -179,17 +174,19 @@ void AlgoIoT::generateAlgorandAddress(const uint8_t *publicKey, uint8_t *address
 
     printf("Base32 Encoded Output: %s\n", address);
     // printf("Base 32 addr size: %u \n", address.length());
-    printf("Base 8 addr Sze + Checksum:  %u \n", sizeof(addressBytes));
+    // printf("Base 8 addr Sze + Checksum:  %u \n", sizeof(addressBytes));
 
     // char buffer[58]; // 58 character wallet address
     // sprintf(buffer, "%X", address);
     // printf("Address debug: %d \n", buffer);
-    printf("Pub K debug: %d \n", m_senderAddressBytes);
-    printf("Priv K debug: %c \n", m_privateKey);
+    // printf("Pub K debug: %d \n", m_senderAddressBytes);
+    // printf("Priv K debug: %c \n", m_privateKey);
 
-    printf("%d", address);
-    // printf("addr4 %d \n", sizeof(buffer));
+    // printf("%d", address);
+    //  printf("addr4 %d \n", sizeof(buffer));
   }
+
+  return address;
 }
 
 uint8_t *AlgoIoT::getPublicKey()

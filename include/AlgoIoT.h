@@ -128,7 +128,7 @@ class AlgoIoT
   
   uint8_t* getPublicKey(); 
   void calculateChecksum(const uint8_t* publicKey, uint8_t* checksum); // used for generating algorand address 
-  void generateAlgorandAddress(const uint8_t* publicKey, uint8_t *address);
+  uint8_t* generateAlgorandAddress(const uint8_t* publicKey, uint8_t *address);
   
   // Decodes Base64 Algorand network hash to 32-byte binary buffer suitable for our functions
   // outBinaryHash allocated internally, has to be freed by caller

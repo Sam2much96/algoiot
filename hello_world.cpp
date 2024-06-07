@@ -41,8 +41,8 @@
 // for API calls and requests
 // #include "webserver/requests.h"
 
-#define WIFI_SSID "itel A60"     //"Galaxy A0220d1"
-#define WIFI_PASSWORD "00000001" // "rxlz8491"
+#define WIFI_SSID "Galaxy A0220d1" //"itel A60"
+#define WIFI_PASSWORD "rxlz8491"   //"00000001"
 
 #define APP_NAME "Hardware Wallet Dev"
 #define MNEMONIC "tank game arrive train bring taxi tackle popular bacon gasp tell pigeon error step leaf zone suit chest next swim luggage oblige opinion about execute"
@@ -57,8 +57,8 @@ int main()
         (4) Implement CUstom HTTP CLient CLass (Done)
         (5) Implement Port Forwarding
         (6) Data to send should be json
-        (7) Implement Webserver for Board A
-        (8) Implement HTTP Requests in a second thread using libcurl : https://github.com/JosephP91/curlcpp
+        (7) Implement Webserver for Board A (done)
+        (8) Implement HTTP Requests (done)
         (9) Implement Multi-threading
         (10) Capture notes from the webserver for llm prompting
         (11) Sd card read and capture
@@ -67,17 +67,6 @@ int main()
 
     // init all io for serial and usb debugging
     stdio_init_all();
-
-    printf("StartUp------->");
-    // 5 secs wait for debugging
-    sleep_ms(5000);
-    // wallet
-    //  create Algoiot object
-    AlgoIoT Wallet(APP_NAME, MNEMONIC);
-    uint8_t *address;
-
-    // Derive the Algorand address (public key) from the private key
-    Wallet.generateAlgorandAddress(Wallet.m_senderAddressBytes, address);
 
     // init wifi
 
@@ -135,22 +124,35 @@ int main()
     // make request to api server
     //
     // https_get_request();
+    
+    if( WifiHelper::isJoined())
+    {
+        // Initialise web server
+        httpd_init();
+        printf("Http server initialised\n");
 
-    // Initialise web server
-    httpd_init();
-    printf("Http server initialised\n");
+        // Configure SSI and CGI handler
+        ssi_init();
+        printf("SSI Handler initialised\n");
+        cgi_init();
+        printf("CGI Handler initialised\n");
 
-    // Configure SSI and CGI handler
-    ssi_init();
-    printf("SSI Handler initialised\n");
-    cgi_init();
-    printf("CGI Handler initialised\n");
+    }
+
+    // wallet
+    //  create Algoiot object as Wallet
+    AlgoIoT Wallet(APP_NAME, MNEMONIC);
+    uint8_t *address;
+
+    // Derive the Algorand address associated with this mnemonic
+    address = Wallet.generateAlgorandAddress(Wallet.m_senderAddressBytes, address);
+    printf("address: %s\n", address);
 
     while (true)
     {
 
         // Blink LED
-        uart_puts(UART_ID, MNEMONIC); // Send Board data as output via Uart, send as Json Document
-        sleep_ms(3000);               // sleep for 3 secs
+        uart_puts(UART_ID, (char *)address); // Send Board data as output via Uart, send as Json Document
+        sleep_ms(3000);                      // sleep for 3 secs
     }
 }

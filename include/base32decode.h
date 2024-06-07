@@ -9,7 +9,7 @@
 
 #include "stdint.h"
 #include <string>
-
+#include <stdbool.h>
 class Base32
 {
   public:
