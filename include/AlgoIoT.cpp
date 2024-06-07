@@ -159,7 +159,7 @@ uint8_t *AlgoIoT::generateAlgorandAddress(const uint8_t *publicKey, uint8_t *add
 
     // To DO :
     // (1) Run Encoding Test
-
+    // (2) Fineture Encoding Test
     // string cat as ascii c,a,t, null
     uint8_t bytetest[4] = {99, 97, 116, 00};
     uint8_t *out_bytetest;

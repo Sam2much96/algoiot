@@ -40,8 +40,9 @@ Micro Algo is a WIP algorand wallet running on a Raspberry Pico W. It ports over
 -(1) HTTP client for pico w is new and is still being implemented for micro algo-picoW for submitting Transactions
 -(2) MicroPython Port
 
-# Tird Party SOftware
+# Third Party SOftware
 - (1) Algoiot
 - (2) esp32 crypto libraries <link>
 - (3) Arduino Crypto Libraries <link>
 - (4) PicoBot <link>
+- (5) Ported Base32 encoder and decoder <https://github.com/NetRat>
