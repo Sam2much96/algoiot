@@ -74,25 +74,55 @@
             position: relative;
             transition: transform 0.5s ease-in-out;
         }
+
+        /* Additional styles for form */
+        form {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            font-size: 1em;
+            margin-bottom: 10px;
+        }
+
+        input[type="submit"] {
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #53be57;
+            transform: scale(1.1);
+        }
     </style>
 </head>
 
 <body>
     <h1>Hardware Wallet Dev</h1>
     <br>
-    <h2>This bit is SSI:</h2>
+    <h2>SSI:</h2>
     <p>Voltage: <!--#volt--></p>
     <p>Temp: <!--#temp--> C</p>
     <p>LED is: <!--#led--></p>
     <br>
-    <h2>This bit is CGI:</h2>
+    <h2>CGI:</h2>
     <a href="/led.cgi?led=1"><button>LED ON</button></a>
     <a href="/led.cgi?led=0"><button>LED OFF</button></a>
     <br>
     <br>
     <a href="/index.shtml">Refresh</a>
 
-
+    <!-- Form for input and submit button -->
+    <form action="/submit" method="get">
+        <input type="text" name="testInput" placeholder="Enter text here">
+        <input type="submit" value="Submit">
+    </form>
 </body>
 
 </html>
