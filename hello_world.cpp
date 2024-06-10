@@ -39,13 +39,17 @@
 #include "webserver/cgi.h"
 
 // for API calls and requests
-// #include "webserver/requests.h"
+#include "webserver/requests.h"
 
 #define WIFI_SSID "Galaxy A0220d1" //"itel A60"
 #define WIFI_PASSWORD "rxlz8491"   //"00000001"
 
 #define APP_NAME "Hardware Wallet Dev"
 #define MNEMONIC "tank game arrive train bring taxi tackle popular bacon gasp tell pigeon error step leaf zone suit chest next swim luggage oblige opinion about execute"
+
+// Manual togggle between client/ server lwip architecture
+#define SERVER false
+
 int main()
 {
     // Blinky Led
@@ -62,6 +66,7 @@ int main()
         (9) Implement Multi-threading
         (10) Capture notes from the webserver for llm prompting
         (11) Sd card read and capture
+        (12) Enable Data i/o between ssi, cgi and main loop
 
     */
 
@@ -114,29 +119,32 @@ int main()
     // Set the TX and RX pins by using the function select on the GPIO
     gpio_set_function(UART_TX_PIN, GPIO_FUNC_UART);
 
-    // const char *mnemonicQr = "tank game arrive train bring taxi tackle popular bacon gasp tell pigeon error step leaf zone suit chest next swim luggage oblige opinion about execute \n";
-    //  Pass node debug to uart puts
-    //  AlgoIot Wallet Setup
-
-    // Print the derived address
-    // printf("pub key: %d", (char *)Wallet.m_senderAddressBytes);
     sleep_ms(10000);
-    // make request to api server
-    //
-    // https_get_request();
-    
-    if( WifiHelper::isJoined())
+
+    if (WifiHelper::isJoined())
     {
-        // Initialise web server
-        httpd_init();
-        printf("Http server initialised\n");
+        // Manual Server /Client Toggle To Optimise for Ram
+        if (SERVER)
+        {
+            // Initialise web server
+            httpd_init();
+            printf("Http server initialised\n");
 
-        // Configure SSI and CGI handler
-        ssi_init();
-        printf("SSI Handler initialised\n");
-        cgi_init();
-        printf("CGI Handler initialised\n");
+            // Configure SSI and CGI handler
+            ssi_init();
+            printf("SSI Handler initialised\n");
+            cgi_init();
+            printf("CGI Handler initialised\n");
+        }
 
+        else
+        {
+            // test http request LWip
+            // make request to api server
+            //
+
+            https_get_request();
+        }
     }
 
     // wallet
