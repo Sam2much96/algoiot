@@ -5,8 +5,9 @@ A Firmware sketch for the Raspberry Pico W microcontroller, demonstrating hardwa
 https://github.com/GT50-SRL/algoiot/blob/main/doc/AlgoIoT.md
 
 
-![board_schematics](https://github.com/Sam2much96/algoiot/blob/dev/Schematic_hackathon1_2024-05-20.png)
 ![AlgoIOT_Logo1](https://github.com/Sam2much96/uAlgo-PicoW/blob/dev/logo.png)
+![board_schematics](https://github.com/Sam2much96/algoiot/blob/dev/Schematic_hackathon1_2024-05-20.png)
+![AlgoIOT_Logo2](https://github.com/GT50-SRL/algoiot/assets/2614303/ba16d833-7ad2-47f5-8bae-315dbd41f9d2)
 ![test](https://github.com/Sam2much96/uAlgo-PicoW/blob/dev/2024-06-09-162435_1366x768_scrot.png)
 
 
