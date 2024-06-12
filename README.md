@@ -1,5 +1,5 @@
 # uAlgo-PicoW
-A Firmware sketch for the Raspberry Pico W microcontroller, demonstrating hardware wallet functionalities on the Algorand blockchain
+A Firmware sketch for the Raspberry Pico W microcontroller, demonstrating hardware wallet functionalities for Algorand blockchain on the Raspberry Pico aand Pico W
 
 - For all information on how to use the project see:
 https://github.com/GT50-SRL/algoiot/blob/main/doc/AlgoIoT.md
@@ -15,11 +15,11 @@ Tradtional wallets store your Secret keys in the web browser or on your smartpho
 
 # Requirements
 
-- PicoSDK
-- PicoSDK Development Environment
-- Arduino Crypto Libraries
-- ESP 32 Crypto Libraries
-- Base32 encoder and Decoder libraries
+- (1) PicoSDK
+- (2) PicoSDK Development Environment
+- (3) Arduino Crypto Libraries
+- (4) ESP 32 Crypto Libraries
+- (5) Base32 encoder and Decoder libraries
 
 # Disclaimer
 - The pico W hosts and runs all calculcations for the uAlgo-Pico W wallet, board 2 hosts the animations and display as I/O device. It is not necessary to build the and it's just used in my implementation for easy debugging, you can as well build this library on a fresh pico w, pico or any other microcontroller supporting the rp2040 chipset
@@ -41,7 +41,7 @@ Micro Algo is a WIP algorand wallet running on a Raspberry Pico W. It ports over
 
 # W I P
 -(1) HTTP client for pico w is new and is still being implemented for micro algo-picoW for submitting Transactions
--(2) MicroPython Port
+-(2) MicroPython Port < link to picobot>
 
 # Third Party SOftware
 - (1) Algoiot
@@ -54,23 +54,22 @@ Micro Algo is a WIP algorand wallet running on a Raspberry Pico W. It ports over
 - (1) Setup PICO_SDK_PATH for building for pico c++ 
 - (2) Build the Local Webpage for self hosting on the pico w
 
-'''
+```
 $ cd webserver
 $ python3 makesfdata.py
-
-'''
+```
 
 - (3) Build the Project 
 
-'''
+```
 $ cd build
 $ cmake .. && make
-'''
+```
 
 - (4) Copy and Paste the Build .uf2 in the pico w after being put in bootsel mode
 - (5) Run this command in Terminal for debugging
 
-'''
+```
 $ picocom -b 115200 /dev/ttyACM0
-'''
+```
 
