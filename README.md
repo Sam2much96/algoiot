@@ -12,7 +12,9 @@ https://github.com/GT50-SRL/algoiot/blob/main/doc/AlgoIoT.md
 
 
 # What It Is
-Tradtional wallets store your Secret keys in the web browser or on your smartphone. This is a security risk because if your device is ever hacked or damaged, your funds are gone & malicious actors can do whatever they want with it; So this device here acts as an opensource harware wallet. It stores your secret keys on the Pico w's flashrom, and the device itself can be programmed to approve transactions on your behalf. The pico w also hosts a local webserver on your wifi network which can be used alongside the hardware for storing and decoding secret keys securely and automating transactions. The demo video below shows the device  decoding a Testnet secret key into it's associated Blockchain Address. 
+Traditional wallets (Hot Wallets) store your Secret keys in the web browser or on your smartphone. This is a security risk because if your device is ever hacked or damaged, your funds are gone & malicious actors can do whatever they want with it; So this device here acts as an opensource hardware wallet (cold wallet). It stores your secret keys on the Pico w's flashrom, and the device itself can be programmed to approve transactions on your behalf. The pico w also hosts a local webserver on your wifi network which can be used alongside the hardware for storing and decoding secret keys securely and automating transactions. The demo video below shows the device decoding a Testnet secret key into it's associated Blockchain Address. 
+
+![Demo_Video](https://img.youtube.com/vi/eb43BSEec0U/maxresdefault.jpg)(https://www.youtube.com/shorts/eb43BSEec0U)
 
 # Requirements
 
